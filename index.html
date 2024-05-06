@@ -1,0 +1,68 @@
+<html>
+    <head> </head>
+    <body>
+        <h1>Dam son, where'd ya find this?</h1>
+
+        <form id="uploadForm">
+            <h2>Upload an image</h2>
+            <img id="imagePreview" src="" alt="" />
+            <input id="fileUpload" type="file" accept="image/png,image/jpeg" />
+            <input type="submit" />
+        </form>
+    </body>
+
+    <script>
+        function sanitizeName(name) {
+            const splitName = name.split(".")[0];
+            return splitName.toLowerCase().replace(/[\W_]+/g, "_");
+        }
+
+        async function upload(data) {
+            const response = await fetch("/.netlify/functions/uploadImage", {
+                method: "POST",
+                body: data,
+            });
+
+            const result = await response.json();
+            console.log(result);
+        }
+
+        const data = new FormData();
+
+        const uploadForm = document.getElementById("uploadForm");
+        const imagePreview = document.getElementById("imagePreview");
+        const fileUpload = document.getElementById("fileUpload");
+
+        fileUpload.addEventListener(
+            "change",
+            async (e) => {
+                const files = e.target.files;
+
+                if (files.length <= 0) {
+                    return;
+                }
+
+                const file = files[0];
+
+                console.log(file.name);
+                data.append("fileName", file.name);
+                data.append("file", file, file.name);
+
+                const reader = new FileReader();
+
+                reader.addEventListener("load", (e) => {
+                    const dataURL = e.target.result;
+                    imagePreview.src = dataURL;
+                });
+
+                reader.readAsDataURL(file);
+            },
+            false,
+        );
+
+        uploadForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            upload(data);
+        });
+    </script>
+</html>

@@ -1,0 +1,18 @@
+{
+  "name": "netlify-dam",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@netlify/blobs": "^7.3.0",
+    "@netlify/functions": "^2.6.3",
+    "parse-multipart-data": "^1.5.0",
+    "parse-multipart-form-data": "^1.0.0"
+  }
+}
