@@ -3,6 +3,19 @@ function sanitizeName(name) {
   return splitName.toLowerCase().replace(/[\W_]+/g, "_");
 }
 
+function getFileExtension(type) {
+  switch (type) {
+    case "image/png":
+      return ".png";
+    case "image/jpg":
+      return ".jpg";
+    case "image/jpeg":
+      return ".jpeg";
+    default:
+      return ".png";
+  }
+}
+
 async function upload(data) {
   const response = await fetch("/.netlify/functions/uploadImage", {
     method: "POST",
@@ -29,7 +42,10 @@ fileUpload.addEventListener(
 
     const file = files[0];
 
-    data.append("fileName", file.name);
+    data.append(
+      "fileName",
+      sanitizeName(file.name) + getFileExtension(file.type),
+    );
     data.append("file", file, file.name);
 
     const reader = new FileReader();
